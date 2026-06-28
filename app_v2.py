@@ -3,28 +3,32 @@ import streamlit as st
 import numpy as np
 from streamlit_mic_recorder import speech_to_text
 
-# 1. Initialize State
 if 'green_speed' not in st.session_state:
     st.session_state.green_speed = 10.0
 
-st.title("PuttSim")
+st.title("PuttSim - Debug Mode")
 
-# 2. Safely capture the voice input
-# We assign the output of the component to 'voice_input'
-voice_input = speech_to_text(language='en', start_prompt="🎙️ Speak", stop_prompt="Stop")
+# The Voice Component
+voice_input = speech_to_text(language='en', start_prompt="🎙️ Update Speed", stop_prompt="Stop")
 
-# 3. Check for the variable safely
+# 1. VISUAL DEBUGGING: Show us the raw data
+st.write("---")
+st.write(f"Raw Voice Input Received: '{voice_input}'")
+
+# 2. TRANSLATION LOGIC
 if voice_input:
+    # Remove any extra spaces or casing issues
+    clean_input = voice_input.strip().lower()
+    
     try:
-        new_val = float(voice_input)
-        st.session_state.green_speed = new_val
-        st.success(f"Speed updated to {new_val}")
+        # Attempt to convert to float
+        st.session_state.green_speed = float(clean_input)
+        st.success(f"Successfully converted '{clean_input}' to {st.session_state.green_speed}")
     except ValueError:
-        st.warning(f"Could not understand: {voice_input}")
+        # This triggers if you say something like "ten" instead of "10"
+        st.error(f"Translation Error: Could not convert '{clean_input}' to a number. Please say a digit like '10' or '9.5'.")
 
-# 4. Display the calculation
-st.write(f"Current Green Speed: {st.session_state.green_speed}")
-
+st.write(f"### Current Green Speed: {st.session_state.green_speed}")
 # --- Main App: The Simulation ---
 st.title("PuttSim")
 st.write(f"Current Green Speed: {st.session_state.green_speed}")
