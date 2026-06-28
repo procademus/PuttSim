@@ -1,43 +1,29 @@
 
 import streamlit as st
 import numpy as np
-import streamlit as st
-
 from streamlit_mic_recorder import speech_to_text
 
-st.title("PuttSim")
-
-# 1. DEFINE the variable first
-voice_data = speech_to_text(language='en', start_prompt="🎙️ Speak", stop_prompt="Stop")
-
-# 2. NOW use the variable
-st.write("Debug: Current voice_data variable is:", voice_data)
-
-if voice_data:
-    st.success(f"I heard you say: {voice_data}")# --- Sidebar: The Control Center ---
-with st.sidebar:
-    st.header("Voice Controls")
-    # This button sits in the sidebar, perfect for mobile thumbs
-    voice_data = speech_to_text(
-        language='en', 
-        start_prompt="🎙️ Speak Setting", 
-        stop_prompt="🛑 Stop"
-    )
-
-# --- Logic: Handle the voice input ---
-# We initialize our simulation variables
+# 1. Initialize State
 if 'green_speed' not in st.session_state:
     st.session_state.green_speed = 10.0
 
-if voice_data:
-    st.sidebar.write(f"Recognized: {voice_data}")
-    # Simple parser: look for numbers in the speech
-    words = voice_data.lower().split()
-    for word in words:
-        # If the user says "set speed to 12", this catches "12"
-        if word.replace('.','',1).isdigit():
-            st.session_state.green_speed = float(word)
-            st.sidebar.success(f"Updated to {st.session_state.green_speed}")
+st.title("PuttSim")
+
+# 2. Safely capture the voice input
+# We assign the output of the component to 'voice_input'
+voice_input = speech_to_text(language='en', start_prompt="🎙️ Speak", stop_prompt="Stop")
+
+# 3. Check for the variable safely
+if voice_input:
+    try:
+        new_val = float(voice_input)
+        st.session_state.green_speed = new_val
+        st.success(f"Speed updated to {new_val}")
+    except ValueError:
+        st.warning(f"Could not understand: {voice_input}")
+
+# 4. Display the calculation
+st.write(f"Current Green Speed: {st.session_state.green_speed}")
 
 # --- Main App: The Simulation ---
 st.title("PuttSim")
