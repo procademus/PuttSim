@@ -1,39 +1,47 @@
 
 import numpy as np
+import re
 import streamlit as st
 from streamlit_mic_recorder import speech_to_text
 
-# 1. Initialize all 4 controls in a dictionary
-if 'sim_params' not in st.session_state:
-    st.session_state.sim_params = {
-        "Length": 10.0,
-        "Slope": 0.0,
-        "Speed": 0.5,
-        "Firmness": 1.0
-    }
+# 1. Initialize ALL variables in session_state
+defaults = {"length": 10, speed": 10.0, "slope": 0.0, "firmness": 6.0}
+for key, value in defaults.items():
+    if key not in st.session_state:
+        st.session_state[key] = value
 
-st.title("PuttSim - Multi-Control")
+# st.title("PuttSim - Multi-Sync")
 
-# 2. Sidebar for Voice Input
-# We use a selectbox to tell the app WHICH parameter we are updating
-param_to_update = st.sidebar.selectbox("Select Parameter to Update", list(st.session_state.sim_params.keys()))
+# 2. Voice Input
+voice_input = speech_to_text(language='en', start_prompt="🎙️ Say commands", stop_prompt="Stop")
 
-voice_input = speech_to_text(language='en', start_prompt=f"🎙️ Set {param_to_update}", stop_prompt="Stop")
-
-# 3. Smart Update Logic
+# 3. Dynamic Loop Parser
 if voice_input:
-    try:
-        new_val = float(voice_input)
-        st.session_state.sim_params[param_to_update] = new_val
-        st.success(f"Updated {param_to_update} to {new_val}")
-    except ValueError:
-        st.error(f"Could not parse '{voice_input}' as a number.")
+    text = voice_input.lower()
+    for key in defaults.keys():
+        # Look for: "speed 12", "slope 5", etc.
+        pattern = rf"{key}\s*(?:to|is|=)?\s*(-?\d*\.?\d+)"
+        match = re.search(pattern, text)
+        if match:
+            st.session_state[key] = float(match.group(1))
+            st.success(f"Updated {key} to {st.session_state[key]}")
 
-# 4. Display all current values
-st.write("### Current Simulation Parameters")
-cols = st.columns(4)
-for i, (key, value) in enumerate(st.session_state.sim_params.items()):
-    cols[i].metric(key, value)
+# 4. Display Sliders (Automatically bound to state)
+# Each slider updates its respective key in st.session_state
+st.slider("Green Speed", 0.0, 20.0, key='speed')
+st.slider("Slope Degree", -10.0, 10.0, key='slope')
+st.slider("Distance", 0.0, 1.0, key='length')
+st.slider("Ball Hardness", 0.0, 2.0, key='hardness')
+
+# 5. Calculation Step
+# This will always use the latest values from sliders OR voice
+result = (st.session_state.speed * 1.5) + (st.session_state.slope * 0.5)
+st.write(f"### Simulation Result: {result}")
+
+# 5. Calculation Step
+# This will always use the value, regardless of whether it came from the slider or voice
+result = st.session_state.speed * 1.5
+st.write(f"### Simulation Result: {result}")
     
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="PuttAlign", page_icon="⛳")
