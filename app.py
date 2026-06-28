@@ -11,7 +11,7 @@ st.markdown("Calculate your break angle instantly.")
 st.sidebar.header("Green Conditions")
 distance_ft = st.sidebar.slider("Distance (ft)", 5, 50, 10)
 slope_percent = st.sidebar.slider("Side Slope (%)", 0.5, 4.0, 2.0, 0.5)
-stimp_speed = st.sidebar.slider("Green Speed", 1, 20, 12)
+stimp_speed = st.sidebar.slider("Green Speed", 1, 20, 10)
 past_hole_inches = st.sidebar.number_input("Past Hole (inches)", 0, 12, 6)
 
 # --- PHYSICS LOGIC ---
