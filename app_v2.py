@@ -5,7 +5,7 @@ import streamlit as st
 from streamlit_mic_recorder import speech_to_text
 
 # 1. Initialize ALL variables in session_state
-defaults = {"length": 10, speed": 10.0, "slope": 0.0, "firmness": 6.0}
+defaults = {"length": 10, "speed": 10.0, "slope": 0.0, "firmness": 6.0}
 for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
