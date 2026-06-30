@@ -15,7 +15,7 @@ base_speed = st.sidebar.slider("Green Speed", 1.0, 20.0, 10.0, 0.5)
 elevation = st.sidebar.slider("🔻 Downhill ----------  (%)  ----------- Uphill🔺",-5.0,5.0,0.0,0.5)
 pace = st.sidebar.selectbox("Putt Pace:",("Holing speed", "Die speed", "Make speed"))
 
-spd_adj = 1.2
+spd_adj = 1.15
 eladj = (elevation *-1)
 stimp_speed = base_speed*(spd_adj**eladj)
 adj_speed = round(stimp_speed)
