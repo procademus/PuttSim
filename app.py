@@ -89,7 +89,7 @@ st.metric(label="Required Aim Angle", value=f"{angle}°")
 st.metric(label="Your Putt Number is",value=f"{puttval}")
 
 st.info(f"Targeting {distance_ft}ft putt with {pace}. Side slope {slope_percent}%.")
-if abselev > 0: st.info(f"Green Speed {base_speed} on the stimpmeter. Adjusting for {abselev}% {puttslope} using {adj_speed} for estimation.")
+if abselev > 0: st.info(f"Green Speed {base_speed} on the stimpmeter. Adjusting for {abselev}% {puttslope}, using {adj_speed} for estimation.")
 if abselev == 0: st.info(f"Green Speed {base_speed} on the stimpmeter.")
 
 # --- Updates to selectbox for pace and updates info box -- 6.29.2026
