@@ -9,36 +9,23 @@ st.markdown("Calculate your Putt Number instantly.")
 
 # --- SIDEBAR INPUTS ---
 st.sidebar.header("Green Conditions")
-<<<<<<< Updated upstream
 distance_ft = st.sidebar.slider("Distance (ft)", 5, 50, 10)
 slope_percent = st.sidebar.slider("Side Slope (%)", 0.5, 5.0, 1.0, 0.5)
 base_speed = st.sidebar.slider("Green Speed", 1.0, 20.0, 10.0, 0.5)
-elevation = st.sidebar.slider("🔻 Downhill ----------  (%)  ----------- Uphill🔺",-5.0,5.0,0.0,0.5)
-pace = st.sidebar.selectbox("Putt Pace:",("Holing speed", "Die speed", "Make speed"))
+elevation = st.sidebar.slider("<< Uphill   ------------- (%)   ----------   Downhill >>",-3.0,3.0,0.0,0.5)
+pace = st.sidebar.selectbox("Putt Pace:",("Holing speed", "Die at the hole", "Make speed"))
 
 spd_adj = 1.2
-eladj = (elevation *-1)
-stimp_speed = base_speed*(spd_adj**eladj)
+stimp_speed = base_speed*(spd_adj**elevation)
 adj_speed = round(stimp_speed)
 
-if elevation < 0: puttslope = "downhill"
-if elevation > 0: puttslope = "uphill"
-if elevation == 0: puttslope = "flat"
-abselev = abs(elevation)
+if elevation < 0: puttslope = "Uphill"
+if elevation > 0: puttslope = "Downhill"
+if elevation == 0: puttslope = "Flat"
 
-if pace == "Die speed": past_hole_inches = 3
+if pace == "Die at the hole": past_hole_inches = 3
 if pace == "Holing speed": past_hole_inches = 6
 if pace == "Make speed": past_hole_inches = 9
-=======
-distance_ft = st.sidebar.slider("Distance (ft)", 5, 50, 6)
-slope_percent = st.sidebar.slider("Side Slope (%)", 0.5, 5.0, 1.0, 0.5)
-stimp_speed = st.sidebar.slider("Green Speed", 1, 20, 9)
-pace = st.sidebar.selectbox("Putt Pace:",("Die", "Hole", "Make"))
-
-if pace == "Die": past_hole_inches = 4
-if pace == "Hole": past_hole_inches = 8
-if pace == "Make": past_hole_inches = 12
->>>>>>> Stashed changes
 
 # --- PHYSICS LOGIC ---
 def calculate_angle(d, s, stimp, past_in):
@@ -97,15 +84,7 @@ if angle > 30: puttval = "Wow Good Luck!"
 
 st.divider()
 st.metric(label="Required Aim Angle", value=f"{angle}°")
-<<<<<<< Updated upstream
 st.metric(label="Your Putt Number is",value=f"{puttval}")
-
-st.info(f"Targeting {distance_ft}ft putt with {pace}. Side slope {slope_percent}%.")
-if abselev > 0: st.info(f"Green Speed {base_speed} on the stimpmeter. Adjusting for {abselev}% {puttslope}, using {adj_speed} for estimation.")
-if abselev == 0: st.info(f"Green Speed {base_speed} on the stimpmeter.")
+st.info(f"Targeting {distance_ft}ft putt with {slope_percent}% side slope. Adjusted Green Speed for {puttslope} putt of {adj_speed} with {pace} pace. ")
 
 # --- Updates to selectbox for pace and updates info box -- 6.29.2026
-# --- Updated with adjustments for uphill/downhill putts -- 6.29.2026
-=======
-st.info(f"Targeting {distance_ft}ft putt with {slope_percent}% slope at Green Speed of {stimp_speed} with {pace} speed.")
->>>>>>> Stashed changes

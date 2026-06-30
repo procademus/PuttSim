@@ -4,6 +4,7 @@ import re
 import streamlit as st
 from streamlit_mic_recorder import speech_to_text
 
+<<<<<<< Updated upstream
 # 1. Update the initialization logic to include the new range
 if 'length' not in st.session_state:
     st.session_state.length = 5.0 # Start at the minimum
@@ -34,6 +35,34 @@ defaults = {"length": 10, "speed": 10.0, "slope": 0.0, "firmness": 6.0}
 for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
+=======
+if 'green_speed' not in st.session_state:
+    st.session_state.green_speed = 10.0
+
+st.title("PuttSim - Debug Mode")
+
+# The Voice Component
+voice_input = speech_to_text(language='en', start_prompt="🎙️ Update Speed", stop_prompt="Stop")
+
+# 1. VISUAL DEBUGGING: Show us the raw data
+st.write("---")
+st.write(f"Raw Voice Input Received: '{voice_input}'")
+
+# 2. TRANSLATION LOGIC
+if voice_input:
+    # Remove any extra spaces or casing issues
+    clean_input = voice_input.strip().lower()
+    
+    try:
+        # Attempt to convert to float
+        st.session_state.green_speed = float(clean_input)
+        st.success(f"Successfully converted '{clean_input}' to {st.session_state.green_speed}")
+    except ValueError:
+        # This triggers if you say something like "ten" instead of "10"
+        st.error(f"Translation Error: Could not convert '{clean_input}' to a number. Please say a digit like '10' or '9.5'.")
+
+st.write(f"### Current Green Speed: {st.session_state.green_speed}")
+>>>>>>> Stashed changes
 
 # st.title("PuttSim - Multi-Sync")
 
